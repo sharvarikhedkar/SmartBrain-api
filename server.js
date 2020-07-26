@@ -54,9 +54,10 @@ app.get('/',(req,res)=> {
 
 app.post('/signin',(req,res) => {
     if(req.body.email === database.users[0].email && req.body.password === database.users[0].password){
-        res.json('success');
+        res.json(database.users[0]);
+        //res.json('success');
     }else{
-        res.status(400).json("Error logging in");
+        res.status(400).json("error logging in");
     }
 }
 )
@@ -71,11 +72,11 @@ app.post('/register', (req,res) => {
         id:'125',
         name: name,
         email: email,
-        password: password,
+        //password: password,
         entries: 0,
         joined: new Date()
         })
-    res.json(database);
+    res.json(database).users[database.users.length-1];
 })
 
 app.get('/profile/:id',(req,res) => {
@@ -100,7 +101,7 @@ app.put('/image',(req,res) =>{
     database.users.forEach(user =>{
         if(user.id === id){
             found = true;
-            user.entries = user.entries + 1;
+            user.entries++;
             return res.json(user.entries);
         }
         }
