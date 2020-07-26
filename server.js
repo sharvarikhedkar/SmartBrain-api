@@ -1,7 +1,18 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 
+// npm package "bcrypt" for password hashing
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
+
+// npm package to Cross-Origin Resource Sharing (CORS) is a mechanism that uses additional 
+//HTTP headers to tell browsers to give a web application running at one origin, access to 
+// selected resources from a different origin.
+const cors = require('cors');
+
 const app = express();
+
+app.use(cors());
 app.use(bodyParser.json());
 
 app.listen(3000, () => {
@@ -26,25 +37,36 @@ const database = {
             entries: 0,
             joined: new Date()
         }
+    ],
+    login: [
+        {
+            id :'987',
+            hash: '',
+            email: 'john@gmail.com'
+        }
     ]
 }
 
+//Routes for application
 app.get('/',(req,res)=> {
     res.send(database);
 });
 
 app.post('/signin',(req,res) => {
     if(req.body.email === database.users[0].email && req.body.password === database.users[0].password){
-        res.json("Logged in");
+        res.json('success');
     }else{
         res.status(400).json("Error logging in");
     }
-    //res.json("signin is working")
 }
 )
 
 app.post('/register', (req,res) => {
     const { email, password, name} = req.body;
+    bcrypt.hash(password, saltRounds, function(err, hash) {
+        // Store hash in your password DB.
+        //console.log(hash);
+    });
     database.users.push({
         id:'125',
         name: name,
