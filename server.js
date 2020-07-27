@@ -10,6 +10,24 @@ const saltRounds = 10;
 // selected resources from a different origin.
 const cors = require('cors');
 
+// using npm package "knex.js" to connect our postgres db to server
+const knex = require('knex');
+const { response } = require('express');
+
+const db = knex({
+    client: 'pg',
+    connection: {
+      host : '127.0.0.1', //currently localhost until we deploy it 
+      user : 'postgres',
+      password : 'Sharu@222',
+      database : 'smartbrain'
+    }
+  });
+
+ db.select('*').from('users').then(data => {
+     console.log(data);
+ });
+
 const app = express();
 
 app.use(cors());
@@ -55,7 +73,9 @@ app.get('/',(req,res)=> {
 app.post('/signin',(req,res) => {
 
     if(req.body.email === database.users[0].email && req.body.password === database.users[0].password){
-        res.json(database.users[0]);
+        //console.log(database.users[0])
+        res.status(200).json(database.users[0]);
+        //console.log("rEACHed");
     } else {
         res.status(400).json('error logging in');
     }
@@ -67,15 +87,19 @@ app.post('/register', (req,res) => {
     bcrypt.hash(password, saltRounds, function(err, hash) {
         // Store hash in your password DB.
     });
-    database.users.push({
-        id:'125',
-        name: name,
+
+    db('users')
+    .returning('*')
+    .insert({
         email: email,
-        //password: password,
-        entries: 0,
+        name: name,
         joined: new Date()
-        })
-    res.json(database.users[database.users.length-1]);
+    })
+    .then(user => {
+        res.json(user[0]);
+    })
+    .catch(err => res.status(400).json('unable to register'));
+
 })
 
 app.get('/profile/:id',(req,res) => {
