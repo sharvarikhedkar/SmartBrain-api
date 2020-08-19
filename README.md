@@ -4,7 +4,7 @@ The backend part of smart-brain, a web app that detects human faces in a image p
 
 - Backend web development using [Node.js](https://nodejs.org/en/), [Express.js](https://expressjs.com/), [PostgreSQL](https://www.postgresql.org/), and [Clarifai API](https://www.clarifai.com/models/face-detection-image-recognition-model-a403429f2ddf4b49b307e318f00e528b-detection).
 
-- The full version of the app is deployed [here](https://smartbrain-12.herokuapp.com/).
+- The full version of the app is deployed [here](https://smartbrain-mern.herokuapp.com/).
 
 - You can find the code for the front-end part [here](https://github.com/mandar242/SmartBrain).
 
